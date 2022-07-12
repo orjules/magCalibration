@@ -28,5 +28,26 @@ As the name implies the gradient descent algorithm needs the gradient of the los
 ![](images/GradientEllipsoid.jpeg)
 
 Then I went about implementing it in c++ so it could run on the arduino device to which the mag sensor was attached.
-The code can be found in (LINK !!!)
-To run it use the command `COMMAND!!!`
+The code can be found in [src/fittingEllipsoid.cpp](src/fittingEllipsoid.cpp)
+To run it use the two commands:
+
+```
+gcc fittingEllipsoid.cpp -o ../target/ellipsoidFit
+
+../target/ellipsoidFit
+```
+
+## The new Problem
+
+For gradient descent there are two parameters that can be changed in the main function of the program. 
+- steps - the number of iterations of the algorithm
+- learning rate - a factor for controlling the rate of convergence
+
+When trying different learning rates with the first implementation, none of them converged, as seen in the following plots:
+
+![](images/ellipsoidPlots/1e-08.png)
+![](images/ellipsoidPlots/4e-08.png)
+![](images/ellipsoidPlots/5e-08.png)
+
+With larger learning rates the values approach infinity even more quickly.
+This implies that something is wrong with this first implementation.
