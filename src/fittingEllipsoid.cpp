@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include"testData.h"
+// #include"smallerTestData.h"
 
 struct magEllipsoid{
     float x0;
@@ -11,18 +12,18 @@ struct magEllipsoid{
 };
 
 float normalPart(magEllipsoid guess, float mx, float my, float mz){
-    float first = (mx - guess.x0) * (mx - guess.x0)/ guess.a * guess.a;
-    float second= (my - guess.y0) * (my - guess.y0)/ guess.b * guess.b;
-    float third = (mz - guess.z0) * (mz - guess.z0)/ guess.c * guess.c;
-    return 2.0 * (first + second + third - 1.0);
+    float first  = (mx - guess.x0) * (mx - guess.x0) / (guess.a * guess.a);
+    float second = (my - guess.y0) * (my - guess.y0) / (guess.b * guess.b);
+    float third  = (mz - guess.z0) * (mz - guess.z0) / (guess.c * guess.c);
+    return (first + second + third - 1.0);
 }
 
 float specialPartUpper(float mag, float guess, float denominator){
-    return 2.0 * (mag - guess) / (denominator * denominator);
+    return (mag - guess) / (denominator * denominator);
 }
 
 float specialPartLower(float mag, float guess, float denominator){
-    return - 2.0 * (mag - guess) * (mag - guess) / (denominator * denominator * denominator);
+    return (mag - guess) * (mag - guess) / (denominator * denominator * denominator);
 }
 
 float errorGradient(magEllipsoid guess, int numberMagValues, float (*function)(float, float, float),
@@ -30,16 +31,16 @@ float errorGradient(magEllipsoid guess, int numberMagValues, float (*function)(f
     float errorSum = 0.0;
     for (int i = 0; i < numberMagValues; i++) {
         float normal = normalPart(guess, magData[i][0], magData[i][1], magData[i][2]);
-        normal = normal * function(specialMag, specialGuess, specialDenominator);
-        errorSum += normal * normal;
+        errorSum += normal * function(specialMag, specialGuess, specialDenominator);
         // printf("%i, errorSum: %f\n", i, errorSum);
     }
-    return errorSum;
+    return -4.0 * errorSum;
 }
 
 magEllipsoid getEllipsoidValues(int numberMagValues, int steps, float learningRate){
     // Initialize
-    magEllipsoid guess = {220.0, 100.0, 60.0, 250.0, 250.0, 250.0};
+    // magEllipsoid guess = {200.0, 100.0, 50.0, 100.0, 100.0, 100.0};
+    magEllipsoid guess = {2.0, 1.0, 5.0, 1.0, 1.1, 1.0};
     printf("step, x0, y0, z0, a, b, c, learningRate\n");
     // Repeat 2 and 3
     for (int i = 0; i < steps; i++) {
@@ -63,6 +64,7 @@ magEllipsoid getEllipsoidValues(int numberMagValues, int steps, float learningRa
 }
 
 int main(){
-    magEllipsoid result = getEllipsoidValues(180, 15, 0.00000004);
+    magEllipsoid result = getEllipsoidValues(numberMagPoints, 50, 0.0000000000001);
+    // printf("%f, %f, %f, %f, %f, %f\n", result.x0, result.y0, result.z0, result.a, result.b, result.c);
     return 0;
 }

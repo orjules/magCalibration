@@ -51,3 +51,16 @@ When trying different learning rates with the first implementation, none of them
 
 With larger learning rates the values approach infinity even more quickly.
 This implies that something is wrong with this first implementation.
+
+## Improvements
+
+Looking over the basic steps I realized, that my first differential was wrong. 
+After fixing this I tested the algorithm without very different results.
+Just for fun I tried a different set of initial guess values, far away from the actual centre of the ellipsoid.
+The Plots were very interesting, because the gradients seemed to overshoot (depending on the learning rate more or less) and then approach zero. 
+
+![](images/ellipsoidPlots/1e-10.png)
+![](images/ellipsoidPlots/1e-11.png)
+![](images/ellipsoidPlots/1e-12.png)
+
+The resulting values were still far from the actual centre. 
